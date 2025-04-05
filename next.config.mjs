@@ -8,7 +8,22 @@ const nextConfig = {
                 port: '',
                 pathname: '/photos/**',
             },
-            // Add more patterns as needed
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+                port: '',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'static.wixstatic.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'www.pexels.com',
+                port: '',
+                pathname: '/photo/**',
+            }
         ],
     }
 };

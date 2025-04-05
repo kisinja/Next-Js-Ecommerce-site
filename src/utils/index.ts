@@ -43,3 +43,16 @@ export const images = [
         alt: "Image 4",
     }
 ];
+
+export const formatPrice = (
+    value: number,
+    currency: string = "KES",
+    locale: string = "en-US",
+) => {
+    return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value);
+};

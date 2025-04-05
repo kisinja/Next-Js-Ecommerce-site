@@ -3,13 +3,17 @@
 import Image from "next/image"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import CartModal from "./CartModal";
+import { useState } from "react";
 
 const NavIcons = () => {
-    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
-
     const router = useRouter();
 
     // Temporary
@@ -18,30 +22,49 @@ const NavIcons = () => {
     const handleProfile = () => {
         if (!isLoggedIn) {
             router.push('/login');
-        } else {
-            setIsProfileOpen((prev) => !prev);
         }
     };
 
     return (
         <div className="flex items-center gap-4 xl:gap-6 relative">
-            <Image src="/profile.png" alt="" width={22} height={22} className="cursor-pointer object-cover" onClick={handleProfile} />
-            {
-                isProfileOpen && <div className="absolute p-4 rounded-md top-12 left-0 text-sm shadow-[0_3px_10px_rgba(0,0,0,.2)] z-20 bg-[whitesmoke]">
-                    <Link href='/profile'>Profile</Link>
-                    <div className="mt-2 cursor-pointer">Logout</div>
-                </div>
-            }
-            <Image src="/notification.png" alt="" width={22} height={22} className="cursor-pointer object-cover" />
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={handleProfile}>
+                    <Image
+                        src="/profile.png"
+                        alt="Profile"
+                        width={22}
+                        height={22}
+                        className="cursor-pointer object-cover"
+                    />
+                </DropdownMenuTrigger>
+                {isLoggedIn && (
+                    <DropdownMenuContent className="w-40 bg-[whitesmoke] shadow-[0_3px_10px_rgba(0,0,0,.2)]">
+                        <DropdownMenuItem asChild className="p-1 cursor-pointer w-full  hover:bg-slate-200">
+                            <Link href='/profile' className=" ">
+                                Profile
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="cursor-pointer p-1 hover:bg-red-500 hover:text-white">
+                            Logout
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                )}
+            </DropdownMenu>
+
+            <Image
+                src="/notification.png"
+                alt="Notifications"
+                width={22}
+                height={22}
+                className="cursor-pointer object-cover"
+            />
+
             <div className="cursor-pointer relative" onClick={() => setIsCartOpen(!isCartOpen)}>
-                <Image src="/cart.png" alt="" width={22} height={22} className=" object-cover" />
+                <Image src="/cart.png" alt="Cart" width={22} height={22} className="object-cover" />
                 <div className="absolute -top-4 -right-4 w-6 h-6 bg-elvis rounded-full flex-center" id="cart-count">2</div>
             </div>
-            {
-                isCartOpen && <div>
-                    <CartModal />
-                </div>
-            }
+
+            {isCartOpen && <CartModal />}
         </div>
     )
 }
