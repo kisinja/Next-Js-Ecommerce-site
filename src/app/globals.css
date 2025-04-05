@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flex-center {
+    @apply flex items-center justify-center;
+}
+
+.flex-container {
+    @apply flex items-center gap-4;
+}
+
+.flex-center-column {
+    @apply flex items-center justify-center flex-col;
+}
+
+.flex-between {
+    @apply flex justify-between items-center;
+}
+
+#cart-count {
+    color: white;
+}
+
+#desktop-nav-link {
+    @apply relative inline-block pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-elvis after:transition-all after:duration-300 hover:after:w-full;
+}
+
+#mobile-menu {
+    height: calc(100vh - 80px);
+}
+
+#search {
+    @apply focus:border-2 focus:border-elvis focus:outline-none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
