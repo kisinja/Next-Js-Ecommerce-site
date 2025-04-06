@@ -45,10 +45,31 @@
     /* Firefox */
 }
 
+input {
+    @apply focus:ring-blue-400 focus:outline-none bg-white/70;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.601);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+#loginPage {
+    background-image: "url(https://i.pinimg.com/474x/1c/4e/98/1c4e982e60eafe917f1337ddf02b0d5c.jpg)";
+    background-size: "cover";
+    background-position: "center";
+}
+
+label{
+ color: #e0e0e0;
+}
 
 
 @layer base {
-  :root {
+    :root {
         --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
         --card: 0 0% 100%;
@@ -75,7 +96,8 @@
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
     }
-  .dark {
+
+    .dark {
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
         --card: 222.2 84% 4.9%;
@@ -106,10 +128,11 @@
 
 
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
 }

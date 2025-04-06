@@ -96,7 +96,7 @@ const ProductList = async ({
             }
             <Pagination
                 currentPage={res.currentPage || 0}
-                hasPrevious={res.hasPrev()}
+                hasPrev={res.hasPrev()}
                 hasNext={res.hasNext()}
             />
         </div>
