@@ -78,7 +78,7 @@ const ProductList = async ({
                                 {formatPrice(p.price?.price)}
                             </span>
                         </div>
-                        <div
+                        {/* <div
                             className="text-sm text-gray-500 break-words whitespace-normal line-clamp-2"
                             dangerouslySetInnerHTML={{
                                 __html:
@@ -86,7 +86,7 @@ const ProductList = async ({
                                         (section: any) => section.title === "shortDesc"
                                     )?.description || p.description) ?? "",
                             }}
-                        />
+                        /> */}
 
                         <button className="rounded-2xl ring-1 ring-elvis text-elvis py-2 px-4 text-xs hover:bg-elvis hover:text-white w-max">
                             Add to cart

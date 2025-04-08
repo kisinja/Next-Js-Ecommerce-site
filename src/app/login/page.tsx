@@ -1,7 +1,10 @@
 "use client";
 
 import { useWixClient } from "@/hooks/useWixClient";
+import { LoginState } from "@wix/sdk";
 import { useState } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 enum MODE {
     LOGIN = "LOGIN",
@@ -11,6 +14,17 @@ enum MODE {
 }
 
 const Login = () => {
+
+    const wixClient = useWixClient();
+    const isLoggedIn = wixClient.auth.loggedIn();
+
+    const pathName = window.location.href;
+    const router = useRouter();
+
+
+    if (isLoggedIn) {
+        router.push("/");
+    }
 
     const [mode, setMode] = useState<MODE>(MODE.LOGIN);
 
@@ -39,7 +53,107 @@ const Login = () => {
                 ? "Reset"
                 : "Verify";
 
-    const wixClient = useWixClient();
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        let res;
+
+        try {
+            switch (mode) {
+                case MODE.LOGIN:
+                    res = await wixClient.auth.login({
+                        email,
+                        password,
+                    });
+                    break;
+
+                case MODE.REGISTER:
+                    if (password !== confirmPassword) {
+                        setError("Passwords do not match!");
+                        return;
+                    }
+                    res = await wixClient.auth.register({
+                        profile: { nickname: username },
+                        email,
+                        password,
+                    });
+                    break;
+
+                case MODE.RESET_PASSWORD:
+                    res = await wixClient.auth.sendPasswordResetEmail(
+                        email,
+                        pathName,
+                    );
+                    setSuccess("Password reset email sent. Please check your e-mail!");
+                    break;
+
+                case MODE.EMAIL_VERIFICATION:
+                    res = await wixClient.auth.processVerification(
+                        { verificationCode: emailCode }
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+
+            console.log(res);
+
+            switch (res?.loginState) {
+                case LoginState.SUCCESS:
+                    setSuccess("Successful! You are being redirected.");
+                    if (!res?.data?.sessionToken) {
+                        setError("Session token not received. Please try again.");
+                        return;
+                    }
+                    const tokens = await wixClient.auth.getMemberTokensForDirectLogin(res.data.sessionToken);
+
+                    if (!tokens?.accessToken) {
+                        setError("Access token not received.");
+                        return;
+                    }
+
+                    console.log("Tokens:", tokens);
+                    Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), { expires: 2 });
+                    wixClient.auth.setTokens(tokens);
+                    router.push("/");
+
+                    break;
+
+                case LoginState.FAILURE:
+                    if (res.errorCode === "invalidEmail" || res.errorCode === "invalidPassword") {
+                        setError("Invalid email or password!");
+                    } else if (res.errorCode === "emailAlreadyExists") {
+                        setError("Email already exists!");
+                    } else if (res.errorCode === "resetPassword") {
+                        setError("You need to reset your password!");
+                    } else {
+                        setError("Something went wrong!")
+                    }
+                    break;
+
+                case LoginState.EMAIL_VERIFICATION_REQUIRED:
+                    setMode(MODE.EMAIL_VERIFICATION);
+                    setSuccess("Verification code sent to your email!");
+                    break;
+
+                case LoginState.OWNER_APPROVAL_REQUIRED:
+                    setError("Owner approval required!");
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (error) {
+            console.log(error);
+            setError("Something went wrong!");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="h-[calc(100vh-80px)] px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center w-full" id="loginPage" style={{
@@ -47,7 +161,7 @@ const Login = () => {
             backgroundSize: "cover",
             backgroundPosition: "center"
         }}>
-            <form className="flex flex-col gap-8 shadow py-6 px-8 rounded-md glass-effect">
+            <form className="flex flex-col gap-8 shadow py-6 px-8 rounded-md glass-effect" onSubmit={handleSubmit}>
                 <h1 className="text-2xl font-semibold text-gray-700">{formTitle}</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
@@ -63,6 +177,7 @@ const Login = () => {
                                 autoCorrect="off"
                                 autoCapitalize="off"
                                 spellCheck="false"
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
                     ) : null}
@@ -80,6 +195,7 @@ const Login = () => {
                                     autoComplete="off"
                                     autoCorrect="off"
                                     autoCapitalize="off"
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                         ) : (
@@ -94,6 +210,7 @@ const Login = () => {
                                     autoCorrect="off"
                                     autoCapitalize="off"
                                     spellCheck="false"
+                                    onChange={(e) => setEmailCode(e.target.value)}
                                 />
                             </div>
                         )
@@ -112,6 +229,7 @@ const Login = () => {
                                     autoComplete="off"
                                     autoCorrect="off"
                                     spellCheck="false"
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
                         ) : null
@@ -132,6 +250,7 @@ const Login = () => {
                                     autoComplete="off"
                                     autoCorrect="off"
                                     autoCapitalize="off"
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                             </div>
                         )

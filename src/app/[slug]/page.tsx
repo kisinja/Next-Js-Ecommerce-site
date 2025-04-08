@@ -67,7 +67,7 @@ const SinglePage = async ({ params }: { params: { slug: string } }) => {
                     ))
                 }
             </div>
-        </div >
+        </div>
     );
 };
 

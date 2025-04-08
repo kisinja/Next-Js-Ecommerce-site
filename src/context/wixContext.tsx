@@ -2,6 +2,7 @@
 
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import { products, collections } from "@wix/stores";
+import { currentCart } from '@wix/ecom';
 import Cookies from "js-cookie";
 import React, { createContext } from "react";
 
@@ -11,12 +12,13 @@ const myWixClient = createClient({
     modules: {
         products,
         collections,
-        //currentCart,
+        currentCart,
     },
     auth: OAuthStrategy({
         clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
         tokens: {
-            refreshToken, accessToken: { value: "", expiresAt: 0 },
+            refreshToken,
+            accessToken: { value: "", expiresAt: 0 },
         }
     }),
 });

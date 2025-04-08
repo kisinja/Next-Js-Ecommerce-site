@@ -11,6 +11,9 @@
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@tailwindcss/postcss": "^4.0.17",
+    "@wix/ecom": "^1.0.1029",
+    "@wix/members": "^1.0.213",
+    "@wix/redirects": "^1.0.76",
     "@wix/sdk": "^1.15.16",
     "@wix/stores": "^1.0.409",
     "class-variance-authority": "^0.7.1",
@@ -21,7 +24,8 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^3.1.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
