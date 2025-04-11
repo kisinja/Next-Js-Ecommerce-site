@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "next lint"
   },
   "dependencies": {
@@ -18,11 +18,14 @@
     "@wix/stores": "^1.0.409",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.6.3",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.487.0",
     "next": "14.2.2",
     "react": "^18",
+    "react-confetti": "^6.4.0",
     "react-dom": "^18",
+    "react-icons": "^5.5.0",
     "tailwind-merge": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.3"

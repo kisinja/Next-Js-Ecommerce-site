@@ -5,6 +5,7 @@ import { media as wixMedia } from "@wix/sdk"; // for images
 import { useStore } from "@/hooks/useCartStore";
 import { currentCart } from "@wix/ecom";
 import { redirects } from "@wix/redirects";
+import { formatPrice } from "@/utils";
 
 const CartModal = () => {
 
@@ -44,7 +45,7 @@ const CartModal = () => {
                     <>
                         <h2 className="text-xl">Shopping Cart</h2>
                         {/* LIST */}
-                        <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-8 overflow-y-auto max-h-[300px]" id="cart-list">
                             {/* ITEM */}
                             {cart.lineItems.map((item) => (
                                 <div className="flex gap-4" key={item._id}>
@@ -76,7 +77,7 @@ const CartModal = () => {
                                                             {item.quantity} x{" "}
                                                         </div>
                                                     )}
-                                                    ${item.price?.amount}
+                                                    {formatPrice(item.price?.amount)}
                                                 </div>
                                             </div>
                                             {/* DESC */}
@@ -103,7 +104,7 @@ const CartModal = () => {
                         <div className="">
                             <div className="flex items-center justify-between font-semibold">
                                 <span className="">Subtotal</span>
-                                <span className="">${cart.subtotal.amount}</span>
+                                <span className="">{formatPrice(cart.subtotal.amount)}</span>
                             </div>
                             <p className="text-gray-500 text-sm mt-2 mb-4">
                                 Shipping and taxes calculated at checkout.
